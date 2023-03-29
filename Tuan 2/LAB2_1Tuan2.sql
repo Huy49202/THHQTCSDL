@@ -1,0 +1,39 @@
+﻿use QLBanHang
+-- cau 1
+--select * from Sanpham
+--select * from Hangsx
+--select * from Nhanvien
+--select * from Xuat
+--select * from Nhap
+-- cau 2
+--select masp, tensp, tenhang, soluong, mausac, giaban, donvitinh, mota from Hangsx, Sanpham order by giaban desc
+-- cau 3
+--select masp, tensp, tenhang,soluong, mausac, giaban, donvitinh, mota 
+--from Sanpham inner join Hangsx on Sanpham.mahangsx = Hangsx.mahangsx where Hangsx.tenhang = 'Samsung'
+-- cau 4
+--select manv, tennv, gioitinh, diachi, sodt, email, phong from Nhanvien where gioitinh = 'Nữ' and phong = 'Kế toán'
+-- cau 5
+--select nhap.sohdn, sp.masp, sp.tensp, hsx.tenhang, nhap.soluongN, nhap.dongiaN, tiennhap = nhap.soluongN * nhap.dongiaN, 
+--sp.mausac, sp.donvitinh, nhap.ngaynhap, nv.tennv, nv.phong from Nhap nhap 
+--inner join Sanpham sp on sp.masp = nhap.masp 
+--inner join Nhanvien nv on nv.manv = nhap.manv
+--inner join Hangsx hsx on hsx.mahangsx = sp.mahangsx
+--order by tiennhap asc
+-- cau 6
+--select sohdx, sp.masp, tensp, tenhang, soluongX, giaban, tienxuat = soluongX * giaban,	mausac, donvitinh, ngayxuat, tennv, phong
+ --from Sanpham sp inner join Xuat x on sp.masp = x.masp
+ --inner join Hangsx hsx on hsx.mahangsx = sp.mahangsx
+ --inner join Nhanvien nv on nv.manv = x.manv where ngayxuat = "2018" order by sohdx asc
+ -- cau 7
+ -- cau 8
+ -- cau 9
+ --select top 10 * from Sanpham order by giaban desc
+ -- cau 10
+ --select * from Sanpham where mahangsx = 'H01' and  giaban between 100000 and 500000
+ -- cau 11
+ -- cau 12
+ -- cau 13
+ -- cau 14
+ -- cau 15
+ -- cau 16
+ -- cau 17
