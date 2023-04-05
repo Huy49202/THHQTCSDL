@@ -22,129 +22,129 @@ end
 select dbo.fn_bai2lab5(2017, 2020)
 
 alter function fn_bai3lab5(@tensp nvarchar(100), @nam int)
-RETURNS int
-AS
-BEGIN
-    DECLARE @soLuongNhap int, @soLuongXuat int, @soLuongThayDoi int;
-    SELECT @soLuongNhap = SUM(soluongN) FROM Nhap n JOIN Sanpham sp ON n.masp = sp.masp WHERE sp.tensp = @tensp AND YEAR(n.ngaynhap) = @nam;
-    SELECT @soLuongXuat = SUM(soluongX) FROM Xuat x JOIN Sanpham sp ON x.masp = sp.masp WHERE sp.tensp = @tensp AND YEAR(x.ngayxuat) = @nam;
-    SET @soLuongThayDoi = @soLuongNhap - @soLuongXuat;
-    RETURN @soLuongThayDoi;
-END
+returns int
+as
+begin
+    declare @soLuongNhap int, @soLuongXuat int, @soLuongThayDoi int;
+    select @soLuongNhap = SUM(soluongN) from Nhap n JOIN Sanpham sp ON n.masp = sp.masp where sp.tensp = @tensp and YEAR(n.ngaynhap) = @nam;
+    select @soLuongXuat = SUM(soluongX) from Xuat x JOIN Sanpham sp ON x.masp = sp.masp where sp.tensp = @tensp and YEAR(x.ngayxuat) = @nam;
+    set @soLuongThayDoi = @soLuongNhap - @soLuongXuat;
+    return @soLuongThayDoi;
+end
 go
-SELECT dbo.fn_bai3lab5('F3 lite',2019)
-go
-
-CREATE FUNCTION fn_bai4lab5(@ngay_bat_dau DATE, @ngay_ket_thuc DATE)
-RETURNS MONEY
-AS
-BEGIN
-    DECLARE @tong_gia_tri_nhap MONEY;
-    SELECT @tong_gia_tri_nhap = SUM(nhap.soluongN * sanpham.giaban)
-    FROM Nhap AS nhap
-    INNER JOIN Sanpham AS sanpham ON nhap.masp = sanpham.masp
-    WHERE nhap.ngaynhap >= @ngay_bat_dau AND nhap.ngaynhap <= @ngay_ket_thuc;
-    RETURN @tong_gia_tri_nhap;
-END;
-go
-SELECT dbo.fn_bai4lab5('2018-01-01', '2021-12-31') AS TongGiaTriNhap
+select dbo.fn_bai3lab5('F3 lite',2019)
 go
 
-CREATE FUNCTION fn_bai5lab5(@tenHang NVARCHAR(20), @nam INT)
-RETURNS MONEY
-AS
-BEGIN
-  DECLARE @tongGiaTriXuat MONEY;
-  SELECT @tongGiaTriXuat = SUM(S.giaban * X.soluongX)
-  FROM Xuat X
+create function fn_bai4lab5(@ngay_bat_dau DATE, @ngay_ket_thuc DATE)
+returns MONEY
+as
+begin
+    declare @tong_gia_tri_nhap MONEY;
+    select @tong_gia_tri_nhap = SUM(nhap.soluongN * sanpham.giaban)
+    from Nhap as nhap
+    INNER JOIN Sanpham as sanpham ON nhap.masp = sanpham.masp
+    where nhap.ngaynhap >= @ngay_bat_dau and nhap.ngaynhap <= @ngay_ket_thuc;
+    return @tong_gia_tri_nhap;
+end;
+go
+select dbo.fn_bai4lab5('2018-01-01', '2021-12-31') as TongGiaTriNhap
+go
+
+create function fn_bai5lab5(@tenHang nvarchar(20), @nam int)
+returns MONEY
+as
+begin
+  declare @tongGiaTriXuat MONEY;
+  select @tongGiaTriXuat = SUM(S.giaban * X.soluongX)
+  from Xuat X
   JOIN Sanpham S ON X.masp = S.masp
   JOIN Hangsx H ON S.mahangsx = H.mahangsx
-  WHERE H.tenhang = @tenHang AND YEAR(X.ngayxuat) = @nam;
-  RETURN @tongGiaTriXuat;
-END;
+  where H.tenhang = @tenHang and YEAR(X.ngayxuat) = @nam;
+  return @tongGiaTriXuat;
+end;
 go
-SELECT dbo.fn_bai5lab5(N'Oppo', 2020) AS 'TongGiaTriXuat';
+select dbo.fn_bai5lab5(N'Oppo', 2020) as 'TongGiaTriXuat';
 go
 
-create FUNCTION fn_bai6lab5(@tenphong NVARCHAR(50))
-RETURNS INT
-AS
-BEGIN
-    DECLARE @soluong INT;
-    SELECT @soluong = COUNT(*) 
-    FROM Nhanvien
-    WHERE phong = @tenphong
-    RETURN @soluong;
-END;
+create function fn_bai6lab5(@tenphong nvarchar(50))
+returns int
+as
+begin
+    declare @soluong int;
+    select @soluong = COUNT(*) 
+    from Nhanvien
+    where phong = @tenphong
+    return @soluong;
+end;
 go
 select dbo.fn_bai6lab5('Kế toán')
 go
 
 
-alter FUNCTION fn_bai7lab5 (@tenSanPham NVARCHAR(50), @ngayNhap DATE)
-RETURNS INT
-AS
-BEGIN
-    DECLARE @soLuongXuat INT
-    SELECT @soLuongXuat = SUM(soluongX)
-    FROM Xuat
-    WHERE masp IN (
-        SELECT masp
-        FROM Sanpham
-        WHERE tensp = @tenSanPham
+alter function fn_bai7lab5 (@tenSanPham nvarchar(50), @ngayNhap DATE)
+returns int
+as
+begin
+    declare @soLuongXuat int
+    select @soLuongXuat = SUM(soluongX)
+    from Xuat
+    where masp IN (
+        select masp
+        from Sanpham
+        where tensp = @tenSanPham
     )
-    AND CONVERT(DATE, ngayxuat) = @ngayNhap
+    and CONVERT(DATE, ngayxuat) = @ngayNhap
     IF @soLuongXuat IS NULL
-        SET @soLuongXuat = 0
-    RETURN @soLuongXuat
-END
-SELECT dbo.fn_bai7lab5('OPPO', '2020-06-14')
+        set @soLuongXuat = 0
+    return @soLuongXuat
+end
+select dbo.fn_bai7lab5('OPPO', '2020-06-14')
 go
 
-CREATE FUNCTION fn_bai8lab5 (@sohdx NCHAR(10))
-RETURNS NVARCHAR(20)
-AS
-BEGIN
-  DECLARE @sdt NVARCHAR(20)
-  SELECT @sdt = Nhanvien.sodt
-  FROM Nhanvien
+create function fn_bai8lab5 (@sohdx nchar(10))
+returns nvarchar(20)
+as
+begin
+  declare @sdt nvarchar(20)
+  select @sdt = Nhanvien.sodt
+  from Nhanvien
   INNER JOIN Xuat ON Nhanvien.manv = Xuat.manv
-  WHERE Xuat.sohdx = @sohdx
-  RETURN @sdt
-END
+  where Xuat.sohdx = @sohdx
+  return @sdt
+end
 select dbo.fn_bai8lab5('X01')
 go
 
-CREATE FUNCTION fn_bai9lab5(@tenSP NVARCHAR(20), @nam INT)
-RETURNS INT
-AS
-BEGIN
-  DECLARE @tongNhapXuat INT;
-  SET @tongNhapXuat = (
-  SELECT COALESCE(SUM(nhap.soluongN), 0) + COALESCE(SUM(xuat.soluongX), 0) AS tongSoLuong
-    FROM Sanpham sp
-    LEFT JOIN Nhap nhap ON sp.masp = nhap.masp
-    LEFT JOIN Xuat xuat ON sp.masp = xuat.masp
-    WHERE sp.tensp = @tenSP AND YEAR(nhap.ngaynhap) = @nam AND YEAR(xuat.ngayxuat) = @nam
+create function fn_bai9lab5(@tenSP nvarchar(20), @nam int)
+returns int
+as
+begin
+  declare @tongNhapXuat int;
+  set @tongNhapXuat = (
+  select COALESCE(SUM(nhap.soluongN), 0) + COALESCE(SUM(xuat.soluongX), 0) as tongSoLuong
+    from Sanpham sp
+    left join Nhap nhap ON sp.masp = nhap.masp
+    left join Xuat xuat ON sp.masp = xuat.masp
+    where sp.tensp = @tenSP and YEAR(nhap.ngaynhap) = @nam and YEAR(xuat.ngayxuat) = @nam
   );
-  RETURN @tongNhapXuat;
-END;
+  return @tongNhapXuat;
+end;
 
 select dbo.fn_bai9lab5('Galaxy V21', 2020)
 
-CREATE FUNCTION fn_bai10lab5(@tenhang NVARCHAR(20))
-RETURNS INT
-AS
-BEGIN
-    DECLARE @soluong INT;
+create function fn_bai10lab5(@tenhang nvarchar(20))
+returns int
+as
+begin
+    declare @soluong int;
 
-    SELECT @soluong = SUM(soluong)
-    FROM Sanpham sp JOIN Hangsx hs ON sp.mahangsx = hs.mahangsx
-    WHERE hs.tenhang = @tenhang;
+    select @soluong = SUM(soluong)
+    from Sanpham sp JOIN Hangsx hs ON sp.mahangsx = hs.mahangsx
+    where hs.tenhang = @tenhang;
 
-    RETURN @soluong;
-END;
+    return @soluong;
+end;
 go
 go
-SELECT dbo.fn_bai10lab5('Samsung') AS Tongsoluongspcuahang
+select dbo.fn_bai10lab5('Samsung') as Tongsoluongspcuahang
 go
