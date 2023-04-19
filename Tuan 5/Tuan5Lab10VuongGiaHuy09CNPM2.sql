@@ -13,4 +13,9 @@ backup log [QLBanHang] to disk = 'C:\VuongGiaHuy09CNPM2_THHQTCSDL\Tuan 5\VuongGi
 DROP DATABASE [QLBanHang]
 RESTORE DATABASE QLBanHang
 FROM DISK = 'C:\VuongGiaHuy09CNPM2_THHQTCSDL\Tuan 5\VuongGiaHuy.bak'
-WITH STANDBY = 'C:\LyHuynhThanhHau.undo'
+WITH STANDBY = 'C:\VuongGiaHuy.undo'
+
+SELECT *
+FROM sys.master_files
+WHERE database_id = DB_ID('tempdb') AND file_id = 2;
+
